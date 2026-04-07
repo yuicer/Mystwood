@@ -3,16 +3,32 @@
 </template>
 
 <script>
+import { isWxCloudProvider } from '@/common/config/runtime'
+
+const env = typeof import.meta !== 'undefined' ? import.meta.env || {} : {}
+
 export default {
   onLaunch() {
+    // #ifdef MP-WEIXIN
+    if (isWxCloudProvider()) {
+      if (!wx?.cloud) {
+        console.warn('[runtime] wx.cloud is unavailable in current environment')
+      } else {
+        const cloudEnv = env.VITE_WECHAT_CLOUD_ENV
+        wx.cloud.init({
+          env: cloudEnv || undefined,
+          traceUser: true
+        })
+      }
+    }
+    // #endif
+
     console.log('亲密空间启动')
   }
 }
 </script>
 
 <style lang="scss">
-@import './uni.scss';
-
 page {
   background: radial-gradient(circle at 20% 20%, #1b2455 0%, #0a0f1f 46%, #05070f 100%);
   color: #ecf3ff;

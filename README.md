@@ -20,15 +20,53 @@
 - 运行配置：`common/config/runtime.js`
 - 微信云函数代码：`cloudfunctions/*`
 
-> 默认 provider 为 `mock`，用于离线开发和演示。
+> 默认规则：开发环境走 `local-api`，生产构建走 `wx-cloud`。也可以用环境变量覆盖。
+
+项目已提供默认环境文件：
+
+- `.env.development`：本地开发默认走 `local-api`
+- `.env.production`：生产构建默认走 `wx-cloud`
+- `.env.*.local`：适合放个人机器上的覆盖配置，不入库
 
 ## 切换数据源
 
-在 `common/config/runtime.js` 中配置：
+当前支持的 provider：
 
 - `provider: 'mock'`：本地 `uni.setStorageSync` 模拟
 - `provider: 'local-api'`：走本地 Node API（http://127.0.0.1:9000）
 - `provider: 'wx-cloud'`：走微信原生云函数 `wx.cloud.callFunction`
+
+环境变量：
+
+```bash
+VITE_SERVICE_PROVIDER=local-api
+VITE_SERVICE_PROVIDER=wx-cloud
+VITE_SERVICE_PROVIDER=mock
+VITE_LOCAL_API_BASE_URL=http://127.0.0.1:9000
+VITE_WECHAT_CLOUD_ENV=your-cloud-env-id
+```
+
+默认行为：
+
+- `npm run dev:h5` / `npm run dev:mp-weixin`：默认 `local-api`
+- `npm run build:h5` / `npm run build:mp-weixin`：默认 `wx-cloud`
+- `npm run dev:all`：会显式以 `local-api` 启动前端，并同时启动本地后端
+
+如果你要显式覆盖，可以这样启动：
+
+```bash
+VITE_SERVICE_PROVIDER=mock npm run dev:h5
+VITE_SERVICE_PROVIDER=wx-cloud npm run build:mp-weixin
+VITE_LOCAL_API_BASE_URL=http://192.168.1.10:9000 npm run dev:mp-weixin
+VITE_WECHAT_CLOUD_ENV=prod-xxx npm run dev:mp-weixin
+```
+
+适合真机联调的本地覆盖文件示例：
+
+```bash
+# .env.development.local
+VITE_LOCAL_API_BASE_URL=http://192.168.1.10:9000
+```
 
 ## 开发命令
 
@@ -37,6 +75,22 @@ npm run dev:h5
 npm run dev:mp-weixin
 npm run build:h5
 npm run build:mp-weixin
+```
+
+当前 H5 开发入口：
+
+- 前端页面：`http://localhost:5173/`
+- 本地后端健康检查：`http://localhost:9000/health`
+
+## 开发环境要求
+
+- Node.js：建议 `20.x`
+- 最低版本：`>= 18.12.0`
+
+仓库已包含 `.nvmrc`，如使用 `nvm` 可直接执行：
+
+```bash
+nvm use
 ```
 
 ## 本地一键同时启动前后端
@@ -51,6 +105,11 @@ npm run dev:all
 
 - 前端开发：`npm run dev:h5`（uni-app H5 dev）
 - 本地后端：`npm run dev:backend`（http://localhost:9000）
+
+说明：
+
+- 项目当前采用根目录结构，`manifest.json`、`pages.json`、`main.js`、`App.vue` 不在 `src/` 下。
+- 因此启动脚本已内置 `UNI_INPUT_DIR=.`，不要再改回默认 `uni` 命令，否则 H5 启动时会错误查找 `src/manifest.json`。
 
 后端健康检查：
 
@@ -69,14 +128,18 @@ curl http://localhost:9000/health
 - `POST /api/tasks/complete`
 - `POST /api/reset`
 
+如果需要切换联调模式，优先使用 `VITE_SERVICE_PROVIDER`，不要再手改 `common/config/runtime.js`。
+
+本地 backend 已按入口、路由、状态计算拆到 `server/local-backend/*`，后续继续加接口时直接在对应模块扩展即可。
+
 ## 微信云函数部署说明
 
 `cloudfunctions/*` 目录为微信云函数代码，请在微信开发者工具中：
 
 1. 开启云开发并选择环境。
 2. 对每个函数目录执行“上传并部署：云端安装依赖”。
-3. 在小程序端初始化 `wx.cloud.init({ env: '你的环境ID' })`。
-4. 将运行 provider 切到 `wx-cloud`。
+3. 配置 `VITE_WECHAT_CLOUD_ENV`，应用启动时会自动执行 `wx.cloud.init(...)`。
+4. 确保运行 provider 为 `wx-cloud`；生产构建默认就是这个值。
 
 > 正式线上推荐使用 `wx-cloud`，本地联调可用 `local-api`。
 

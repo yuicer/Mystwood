@@ -1,4 +1,5 @@
-const BASE_URL = 'http://127.0.0.1:9000'
+const env = typeof import.meta !== 'undefined' ? import.meta.env || {} : {}
+const BASE_URL = env.VITE_LOCAL_API_BASE_URL || 'http://127.0.0.1:9000'
 
 function request(url, data = {}, method = 'GET') {
   return new Promise((resolve, reject) => {
@@ -18,12 +19,6 @@ function request(url, data = {}, method = 'GET') {
   })
 }
 
-function getThemeByScore(score) {
-  if (score < 40) return { name: '霓虹冷调', bg: 'linear-gradient(135deg,#121a3d,#1f2a67,#26358a)' }
-  if (score < 80) return { name: '跃迁暖调', bg: 'linear-gradient(135deg,#1b2e64,#3e54c7,#9b51ff)' }
-  return { name: '共振高能', bg: 'linear-gradient(135deg,#141a43,#255de7,#00d3ff)' }
-}
-
 export default {
   getState: () => request('/api/state'),
   createSpace: name => request('/api/spaces', { name }, 'POST'),
@@ -32,6 +27,5 @@ export default {
   approveCategory: (id, approved) => request('/api/categories/approve', { id, approved }, 'POST'),
   createTask: payload => request('/api/tasks', payload, 'POST'),
   completeTask: id => request('/api/tasks/complete', { id }, 'POST'),
-  dissolveSpace: () => request('/api/reset', {}, 'POST'),
-  getThemeByScore
+  dissolveSpace: () => request('/api/reset', {}, 'POST')
 }

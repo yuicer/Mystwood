@@ -40,7 +40,8 @@
 </template>
 
 <script>
-import { completeTask, getState, getThemeByScore } from '@/common/services'
+import { getThemeByScore } from '@/common/config/theme'
+import { completeTask, getState } from '@/common/services'
 
 export default {
   data() {
