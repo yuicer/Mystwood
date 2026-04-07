@@ -1,0 +1,25 @@
+{
+  "name": "亲密空间",
+  "appid": "__UNI__MYSTWOOD",
+  "description": "双人亲密空间 MVP",
+  "versionName": "0.3.0",
+  "versionCode": 300,
+  "transformPx": false,
+  "app-plus": {
+    "usingComponents": true,
+    "nvueStyleCompiler": "uni-app"
+  },
+  "h5": {
+    "title": "亲密空间",
+    "router": {
+      "base": "/"
+    }
+  },
+  "mp-weixin": {
+    "appid": "",
+    "setting": {
+      "urlCheck": false
+    },
+    "usingComponents": true
+  }
+}
