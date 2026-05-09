@@ -1,22 +1,16 @@
 {
   "name": "mystwood-intimacy-space",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "engines": {
     "node": ">=18.12.0"
   },
   "scripts": {
-    "dev:h5": "UNI_INPUT_DIR=. uni",
     "dev:mp-weixin": "UNI_INPUT_DIR=. uni -p mp-weixin",
-    "dev:backend": "node server/local-backend.js",
-    "dev:all": "node scripts/dev-all.js",
-    "build:h5": "UNI_INPUT_DIR=. uni build",
     "build:mp-weixin": "UNI_INPUT_DIR=. uni build -p mp-weixin",
     "deploy:cloud": "node scripts/deploy-cloud-functions.js",
     "deploy:mini": "node scripts/deploy-mini-program.js",
-    "deploy:all": "npm run deploy:cloud && npm run deploy:mini",
-    "build:h5:static": "node scripts/build-h5-static.js",
-    "deploy:h5": "bash scripts/deploy-gh-pages.sh"
+    "deploy:all": "npm run deploy:cloud && npm run deploy:mini"
   },
   "dependencies": {
     "@dcloudio/uni-app": "3.0.0-5000620260331001",
