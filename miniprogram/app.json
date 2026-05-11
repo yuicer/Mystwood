@@ -1,0 +1,19 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/space/create",
+    "pages/space/invite",
+    "pages/category/list",
+    "pages/task/create",
+    "pages/memory/list",
+    "pages/me/settings"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "亲密空间",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#f6f7fb"
+  },
+  "usingComponents": {},
+  "sitemapLocation": "sitemap.json"
+}
