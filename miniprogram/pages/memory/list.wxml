@@ -1,1 +1,11 @@
-<view style="padding:24rpx"><view class="card"><view style="font-size:30rpx;font-weight:600;margin-bottom:12rpx">回忆时间线</view><view wx:if="{{a}}" class="hint">还没有归档内容。</view><view wx:for="{{b}}" wx:for-item="item" wx:key="e" style="border-top:1px solid #f1f5f9;padding:14rpx 0"><view>{{item.a}}</view><view class="hint">{{item.b}} · {{item.c}}</view><view class="hint">{{item.d}}</view></view></view></view>
+<view class="page-wrap">
+  <view class="card">
+    <view class="section-title" style="margin-bottom:12rpx">回忆时间线</view>
+    <view wx:if="{{a}}" class="hint">还没有归档内容。</view>
+    <view wx:for="{{b}}" wx:for-item="item" wx:key="e" class="list-item">
+      <view>{{item.a}}</view>
+      <view class="hint">{{item.b}} · {{item.c}}</view>
+      <view class="hint">{{item.d}}</view>
+    </view>
+  </view>
+</view>
