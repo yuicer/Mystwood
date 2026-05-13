@@ -1,7 +1,7 @@
 <view class="page-wrap">
   <view class="card">
     <view class="section-title">创建你们的空间</view>
-    <input class="field" placeholder="例如：我们的小宇宙" value="{{a}}" bindinput="{{b}}" />
-    <button class="btn-primary btn-stack" bindtap="{{c}}">创建并去邀请</button>
+    <input class="field" placeholder="例如：我们的小宇宙" value="{{name}}" bindinput="onNameInput" />
+    <button class="btn-primary btn-stack" bindtap="submit">创建并去邀请</button>
   </view>
 </view>

@@ -20,6 +20,6 @@
   <view class="card">
     <view style="font-size:30rpx;font-weight:600">关系解绑</view>
     <view class="hint" style="margin:12rpx 0">解绑后数据不保留，不可恢复。</view>
-    <button class="btn-danger" bindtap="{{a}}">解绑并清空数据</button>
+    <button class="btn-danger" bindtap="dissolve">解绑并清空数据</button>
   </view>
 </view>

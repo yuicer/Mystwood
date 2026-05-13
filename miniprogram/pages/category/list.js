@@ -1,61 +1,67 @@
 "use strict";
-const common_vendor = require("../../common/vendor.js");
-const _sfc_main = {
-  data() {
-    return {
-      categories: [],
-      form: {
-        name: "",
-        rule: ""
-      }
-    };
+
+const api = require("../../utils/api.js");
+
+Page({
+  data: {
+    categories: [],
+    form: {
+      name: "",
+      rule: ""
+    }
   },
+
   async onShow() {
-    this.categories = (await common_vendor.getState()).categories;
+    await this.loadCategories();
   },
-  methods: {
-    statusText(status) {
-      return status === "active" ? "已生效" : status === "rejected" ? "已拒绝" : "待同意";
-    },
-    async submit() {
-      if (!this.form.name.trim()) {
-        common_vendor.index.showToast({ title: "请填写类名称", icon: "none" });
-        return;
-      }
-      await common_vendor.createCategory({ name: this.form.name.trim(), rule: this.form.rule.trim() || "完成+10，逾期-5" });
-      this.form = { name: "", rule: "" };
-      this.categories = (await common_vendor.getState()).categories;
-      common_vendor.index.showToast({ title: "已发起", icon: "success" });
-    },
-    async approve(id, yes) {
-      await common_vendor.approveCategory(id, yes);
-      this.categories = (await common_vendor.getState()).categories;
+
+  async loadCategories() {
+    try {
+      const state = await api.getState();
+      this.setData({
+        categories: (state.categories || []).map((item) => ({
+          ...item,
+          statusText: item.status === "active" ? "已生效" : item.status === "rejected" ? "已拒绝" : "待同意"
+        }))
+      });
+    } catch (error) {
+      wx.showToast({ title: error.message || "加载失败", icon: "none" });
+    }
+  },
+
+  onNameInput(event) {
+    this.setData({ "form.name": event.detail.value });
+  },
+
+  onRuleInput(event) {
+    this.setData({ "form.rule": event.detail.value });
+  },
+
+  async submit() {
+    const name = this.data.form.name.trim();
+    const rule = this.data.form.rule.trim() || "完成+10，逾期-5";
+    if (!name) {
+      wx.showToast({ title: "请填写类名称", icon: "none" });
+      return;
+    }
+
+    try {
+      await api.createCategory({ name, rule });
+      this.setData({ form: { name: "", rule: "" } });
+      await this.loadCategories();
+      wx.showToast({ title: "已发起", icon: "success" });
+    } catch (error) {
+      wx.showToast({ title: error.message || "创建失败", icon: "none" });
+    }
+  },
+
+  async approve(event) {
+    try {
+      const approved = event.currentTarget.dataset.approved === true || event.currentTarget.dataset.approved === "true";
+      await api.approveCategory(event.currentTarget.dataset.id, approved);
+      await this.loadCategories();
+    } catch (error) {
+      wx.showToast({ title: error.message || "操作失败", icon: "none" });
     }
   }
-};
-function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-  return common_vendor.e({
-    a: $data.form.name,
-    b: common_vendor.o(($event) => $data.form.name = $event.detail.value, "59"),
-    c: $data.form.rule,
-    d: common_vendor.o(($event) => $data.form.rule = $event.detail.value, "c5"),
-    e: common_vendor.o((...args) => $options.submit && $options.submit(...args), "79"),
-    f: $data.categories.length === 0
-  }, $data.categories.length === 0 ? {} : {}, {
-    g: common_vendor.f($data.categories, (item, k0, i0) => {
-      return common_vendor.e({
-        a: common_vendor.t(item.name),
-        b: common_vendor.t(item.rule),
-        c: common_vendor.t($options.statusText(item.status)),
-        d: item.status === "pending"
-      }, item.status === "pending" ? {
-        e: common_vendor.o(($event) => $options.approve(item.id, true), item.id),
-        f: common_vendor.o(($event) => $options.approve(item.id, false), item.id)
-      } : {}, {
-        g: item.id
-      });
-    })
-  });
-}
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render]]);
-wx.createPage(MiniProgramPage);
+});

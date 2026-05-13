@@ -1,13 +1,13 @@
 <view class="page-wrap">
-  <view wx:if="{{a}}" class="card">
-    <view class="section-title">{{b}}</view>
-    <view class="hint" style="margin:12rpx 0">分享这个邀请码给 TA：{{c}}</view>
-    <button bindtap="{{d}}">复制邀请码</button>
-    <button class="btn-primary btn-stack" bindtap="{{e}}">模拟对方同意</button>
+  <view wx:if="{{space}}" class="card">
+    <view class="section-title">{{space.name}}</view>
+    <view class="hint" style="margin:12rpx 0">分享这个邀请码给 TA：{{space.inviteToken}}</view>
+    <button bindtap="copy">复制邀请码</button>
+    <button class="btn-primary btn-stack" bindtap="simulateAccept">模拟对方同意</button>
   </view>
 
   <view wx:else class="card">
     <view class="hint">你还没有空间，先创建一个吧。</view>
-    <button class="btn-primary btn-stack" bindtap="{{f}}">去创建</button>
+    <button class="btn-primary btn-stack" bindtap="goCreate">去创建</button>
   </view>
 </view>

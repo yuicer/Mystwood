@@ -3,12 +3,19 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 const db = cloud.database()
 
 exports.main = async (event) => {
+  const wxContext = cloud.getWXContext()
   const { action, payload, id, approved } = event
   try {
     switch (action) {
       case 'createCategory': {
+        const spaceRes = await db.collection('spaces').where({ members: wxContext.OPENID }).limit(1).get()
+        const space = spaceRes.data[0]
+        if (!space) return { code: 404, message: '请先创建空间' }
+
         const row = {
           ...payload,
+          spaceId: space._id,
+          createdBy: wxContext.OPENID,
           status: 'pending',
           createdAt: Date.now()
         }

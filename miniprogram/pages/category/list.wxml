@@ -1,21 +1,21 @@
 <view class="page-wrap">
   <view class="card">
     <view class="section-title">新建类（需双方同意）</view>
-    <input class="field" placeholder="类名称，如：运动" value="{{a}}" bindinput="{{b}}" />
-    <input class="field" placeholder="规则，如：完成双方+10，逾期双方-5" value="{{c}}" bindinput="{{d}}" />
-    <button class="btn-primary" style="margin-top:12rpx" bindtap="{{e}}">创建并发起同意</button>
+    <input class="field" placeholder="类名称，如：运动" value="{{form.name}}" bindinput="onNameInput" />
+    <input class="field" placeholder="规则，如：完成双方+10，逾期双方-5" value="{{form.rule}}" bindinput="onRuleInput" />
+    <button class="btn-primary" style="margin-top:12rpx" bindtap="submit">创建并发起同意</button>
   </view>
 
   <view class="card">
     <view class="section-title" style="margin-bottom:12rpx">类列表</view>
-    <view wx:if="{{f}}" class="hint">还没有类。</view>
-    <view wx:for="{{g}}" wx:for-item="item" wx:key="g" class="list-item">
-      <view>{{item.a}}</view>
-      <view class="hint">{{item.b}}</view>
-      <view class="hint">状态：{{item.c}}</view>
-      <view wx:if="{{item.d}}" style="margin-top:8rpx">
-        <button size="mini" class="btn-primary" bindtap="{{item.e}}">模拟对方同意</button>
-        <button size="mini" class="btn-danger" style="margin-left:8rpx" bindtap="{{item.f}}">拒绝</button>
+    <view wx:if="{{categories.length === 0}}" class="hint">还没有类。</view>
+    <view wx:for="{{categories}}" wx:key="_id" class="list-item">
+      <view>{{item.name}}</view>
+      <view class="hint">{{item.rule}}</view>
+      <view class="hint">状态：{{item.statusText}}</view>
+      <view wx:if="{{item.status === 'pending'}}" style="margin-top:8rpx">
+        <button size="mini" class="btn-primary" data-id="{{item._id}}" data-approved="{{true}}" bindtap="approve">模拟对方同意</button>
+        <button size="mini" class="btn-danger" style="margin-left:8rpx" data-id="{{item._id}}" data-approved="{{false}}" bindtap="approve">拒绝</button>
       </view>
     </view>
   </view>

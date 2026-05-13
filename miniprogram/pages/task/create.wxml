@@ -2,19 +2,19 @@
   <view class="card">
     <view class="section-title">创建任务</view>
 
-    <picker range="{{b}}" range-key="name" bindchange="{{c}}" style="margin-top:12rpx">
-      <view class="picker-field">{{a}}</view>
+    <picker range="{{activeCategories}}" range-key="name" bindchange="onCategoryPick" style="margin-top:12rpx">
+      <view class="picker-field">{{currentCategory ? currentCategory.name : "选择一个已生效的类"}}</view>
     </picker>
 
-    <input class="field" placeholder="任务标题" value="{{d}}" bindinput="{{e}}" />
-    <input class="field" placeholder="地点（可选，默认可定位）" value="{{f}}" bindinput="{{g}}" />
-    <input class="field" placeholder="图片地址（可选）" value="{{h}}" bindinput="{{i}}" />
+    <input class="field" placeholder="任务标题" value="{{form.title}}" bindinput="onTitleInput" />
+    <input class="field" placeholder="地点（可选，默认可定位）" value="{{form.locationName}}" bindinput="onLocationInput" />
+    <input class="field" placeholder="图片地址（可选）" value="{{form.imageUrl}}" bindinput="onImageInput" />
 
-    <picker mode="date" bindchange="{{k}}" style="margin-top:10rpx">
-      <view class="picker-field">截止日期：{{j}}</view>
+    <picker mode="date" bindchange="onDatePick" style="margin-top:10rpx">
+      <view class="picker-field">截止日期：{{form.date || "请选择"}}</view>
     </picker>
 
-    <button class="btn-primary" style="margin-top:12rpx" bindtap="{{l}}">创建任务</button>
-    <button class="btn-stack" bindtap="{{m}}">查看回忆归档</button>
+    <button class="btn-primary" style="margin-top:12rpx" bindtap="create">创建任务</button>
+    <button class="btn-stack" bindtap="toMemory">查看回忆归档</button>
   </view>
 </view>
