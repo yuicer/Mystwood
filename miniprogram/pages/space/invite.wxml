@@ -3,7 +3,13 @@
     <view class="section-title">{{space.name}}</view>
     <view class="hint" style="margin:12rpx 0">分享这个邀请码给 TA：{{space.inviteToken}}</view>
     <button bindtap="copy">复制邀请码</button>
-    <button class="btn-primary btn-stack" bindtap="simulateAccept">模拟对方同意</button>
+    <button class="btn-primary btn-stack" open-type="share">微信分享邀请</button>
+  </view>
+
+  <view wx:elif="{{invite}}" class="card">
+    <view class="section-title">{{invite.name}}</view>
+    <view class="hint" style="margin:12rpx 0 20rpx">对方邀请你加入这个空间。</view>
+    <button class="btn-primary" bindtap="acceptInvite">接受邀请</button>
   </view>
 
   <view wx:else class="card">

@@ -1,18 +1,23 @@
-"use strict";
+'use strict';
+
+const config = require('./config.js');
 
 App({
   globalData: {},
 
   onLaunch() {
     if (!wx.cloud) {
-      console.warn("[runtime] wx.cloud is unavailable in current environment");
+      console.warn('[runtime] wx.cloud is unavailable in current environment');
       return;
     }
 
-    wx.cloud.init({
-      traceUser: true
-    });
+    const cloudInitOptions = {
+      traceUser: true,
+      env: config.cloudEnvId,
+    };
 
-    console.log("亲密空间启动");
-  }
+    wx.cloud.init(cloudInitOptions);
+
+    console.log('海边沙滩启动');
+  },
 });

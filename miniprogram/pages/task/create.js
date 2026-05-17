@@ -4,8 +4,6 @@ const api = require("../../utils/api.js");
 
 Page({
   data: {
-    activeCategories: [],
-    currentCategory: null,
     form: {
       title: "",
       locationName: "",
@@ -16,19 +14,10 @@ Page({
 
   async onShow() {
     try {
-      const state = await api.getState();
-      const activeCategories = (state.categories || []).filter((category) => category.status === "active");
-      this.setData({
-        activeCategories,
-        currentCategory: this.data.currentCategory || activeCategories[0] || null
-      });
+      await api.getState();
     } catch (error) {
       wx.showToast({ title: error.message || "加载失败", icon: "none" });
     }
-  },
-
-  onCategoryPick(event) {
-    this.setData({ currentCategory: this.data.activeCategories[Number(event.detail.value)] });
   },
 
   onTitleInput(event) {
@@ -48,11 +37,7 @@ Page({
   },
 
   async create() {
-    const { currentCategory, form } = this.data;
-    if (!currentCategory) {
-      wx.showToast({ title: "请先创建并激活类", icon: "none" });
-      return;
-    }
+    const { form } = this.data;
     if (!form.title.trim()) {
       wx.showToast({ title: "请填写任务标题", icon: "none" });
       return;
@@ -60,8 +45,6 @@ Page({
 
     try {
       await api.createTask({
-        categoryId: currentCategory._id,
-        categoryName: currentCategory.name,
         title: form.title.trim(),
         locationName: form.locationName.trim(),
         imageUrl: form.imageUrl.trim(),

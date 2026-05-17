@@ -1,16 +1,13 @@
 "use strict";
 
 const api = require("../../utils/api.js");
-const { getThemeByScore } = require("../../utils/theme.js");
 
 Page({
   data: {
     state: {
       space: null,
-      tasks: [],
-      score: 50
+      tasks: []
     },
-    theme: getThemeByScore(50),
     todoTasks: []
   },
 
@@ -31,7 +28,6 @@ Page({
 
       this.setData({
         state,
-        theme: getThemeByScore(state.score),
         todoTasks
       });
     } catch (error) {

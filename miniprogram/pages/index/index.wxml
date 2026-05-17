@@ -1,4 +1,4 @@
-<view style="min-height:100vh;padding:24rpx;background:{{theme.bg}}">
+<view style="min-height:100vh;padding:24rpx;background:{{state.space && state.space.theme ? state.space.theme.bg : '#f7f6f3'}}">
   <view wx:if="{{!state.space}}" class="card">
     <view style="font-size:36rpx;font-weight:600">欢迎来到亲密空间</view>
     <view class="hint" style="margin:12rpx 0 20rpx">先创建你们的双人空间，再邀请 TA 加入。</view>
@@ -9,7 +9,7 @@
     <view class="card">
       <view style="font-size:34rpx;font-weight:600">{{state.space.name}}</view>
       <view class="hint" style="margin-top:8rpx">状态：{{state.space.status === 'active' ? '已激活' : '待对方同意'}}</view>
-      <view class="hint" style="margin-top:8rpx">亲密主题：{{theme.name}}</view>
+      <view class="hint" style="margin-top:8rpx">空间主题：{{state.space.theme.name}}</view>
     </view>
 
     <view wx:if="{{state.space.status !== 'active'}}" class="card">
@@ -19,8 +19,7 @@
 
     <view wx:else class="card">
       <view style="font-size:30rpx;font-weight:600;margin-bottom:12rpx">快捷入口</view>
-      <button data-url="/pages/category/list" bindtap="go">共同事项类</button>
-      <button data-url="/pages/task/create" bindtap="go" style="margin-top:10rpx">创建任务</button>
+      <button data-url="/pages/task/create" bindtap="go">创建任务</button>
       <button data-url="/pages/memory/list" bindtap="go" style="margin-top:10rpx">回忆归档</button>
       <button data-url="/pages/me/settings" bindtap="go" style="margin-top:10rpx">设置</button>
     </view>

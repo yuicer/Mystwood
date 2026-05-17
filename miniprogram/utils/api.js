@@ -30,17 +30,14 @@ module.exports = {
   createSpace(name) {
     return callFunction("space-service", { action: "createSpace", name });
   },
-  acceptInvite() {
-    return callFunction("space-service", { action: "acceptInvite" });
+  getInvite(inviteToken) {
+    return callFunction("space-service", { action: "getInvite", inviteToken });
+  },
+  acceptInvite(inviteToken) {
+    return callFunction("space-service", { action: "acceptInvite", inviteToken });
   },
   dissolveSpace() {
     return callFunction("space-service", { action: "dissolveSpace" });
-  },
-  createCategory(payload) {
-    return callFunction("category-service", { action: "createCategory", payload });
-  },
-  approveCategory(id, approved) {
-    return callFunction("category-service", { action: "approveCategory", id, approved });
   },
   createTask(payload) {
     return callFunction("task-service", { action: "createTask", payload });
